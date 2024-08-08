@@ -5,10 +5,6 @@ spring:
     user:
       name: admin
       password: admin
-  boot:
-    admin:
-      ui:
-        public-url: http://localhost:8000/admin
 
 server:
   port: 80
