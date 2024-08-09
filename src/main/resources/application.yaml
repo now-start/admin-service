@@ -6,6 +6,11 @@ spring:
       name: admin
       password: admin
 
+eureka:
+  client:
+    service-url:
+      defaultZone: ${eureka_servers:http://localhost:8761/eureka}
+
 server:
   port: 80
 
