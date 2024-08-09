@@ -1,10 +1,10 @@
 spring:
   application:
     name: admin
-  security:
-    user:
-      name: admin
-      password: admin
+#  security:
+#    user:
+#      name: admin
+#      password: admin
 
 eureka:
   client:
@@ -12,11 +12,11 @@ eureka:
       defaultZone: ${eureka_servers:http://localhost:8761/eureka}
 
 server:
-  port: 80
+  port: 8090
 
 management:
   server:
-    port: 81
+    port: 8091
   info:
     os:
       enabled: true
