@@ -15,11 +15,10 @@ https://spring.nowstart.org
 
 ## Environment
 
-| key           | required |
-|---------------|----------|
-| BASE_URL      | O        |
-| USER_NAME     | O        |
-| USER_PASSWORD | O        |
+| key            | required |
+|----------------|----------|
+| USER_NAME      | O        |
+| USER_PASSWORD  | O        |
 
 ## docker-compose
 
