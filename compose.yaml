@@ -1,0 +1,11 @@
+services:
+  monitor:
+    user: root
+    restart: always
+    image: ghcr.io/now-start/admin-service:latest
+    ports:
+      - 8761:8761
+    volumes:
+      - ./log:/workspace/log
+    environment:
+      - TZ=Asia/Seoul

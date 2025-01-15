@@ -1,26 +1,28 @@
+server:
+  port: 8761
+
 spring:
   application:
     name: admin
-#  security:
-#    user:
-#      name: admin
-#      password: admin
+  boot:
+    admin:
+      context-path: /monitor
+  security:
+    user:
+      name: ${USER_NAME:admin}
+      password: ${USER_PASSWORD:admin}
 
 eureka:
-  client:
-    service-url:
-      defaultZone: ${eureka_servers:http://localhost:8761/eureka}
-
-server:
-  port: 8090
+  instance:
+    metadata-map:
+      user.name: ${spring.security.user.name}
+      user.password: ${spring.security.user.password}
 
 management:
-  server:
-    port: 8091
   info:
-    os:
-      enabled: true
     java:
+      enabled: true
+    os:
       enabled: true
     process:
       enabled: true
@@ -34,4 +36,4 @@ management:
 
 logging:
   file:
-    path: build/log
+    path: ./log
