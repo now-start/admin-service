@@ -16,10 +16,13 @@ spring:
 eureka:
   instance:
     metadata-map:
+      management.port: ${management.server.port}
       user.name: ${spring.security.user.name}
       user.password: ${spring.security.user.password}
 
 management:
+  server:
+    port: 8081
   info:
     java:
       enabled: true
