@@ -1,35 +1,19 @@
 server:
-  port: 8761
+  port: 8080
+  shutdown: graceful
   forward-headers-strategy: framework
-
-spring:
-  application:
-    name: admin
-  boot:
-    admin:
-      context-path: /monitor
-  security:
-    user:
-      name: ${USER_NAME:admin}
-      password: ${USER_PASSWORD:admin}
 
 eureka:
   instance:
     metadata-map:
       management.port: ${management.server.port}
-      user.name: ${spring.security.user.name}
-      user.password: ${spring.security.user.password}
+  client:
+    service-url:
+      defaultZone: ${SERVICE_URL:https://spring.nowstart.org/admin/eureka/}
 
 management:
   server:
     port: 8081
-  info:
-    java:
-      enabled: true
-    os:
-      enabled: true
-    process:
-      enabled: true
   endpoints:
     web:
       exposure:
@@ -37,7 +21,16 @@ management:
   endpoint:
     health:
       show-details: always
+  info:
+    os:
+      enabled: true
+    java:
+      enabled: true
+    process:
+      enabled: true
 
 logging:
   file:
-    path: ./log
+    path: ./logs
+  charset:
+    file: UTF-8
