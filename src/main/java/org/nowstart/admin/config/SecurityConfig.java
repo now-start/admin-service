@@ -15,7 +15,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthHandler jwtAuthHandler;
     private final AdminServerProperties adminServer;
 
     @Bean
@@ -23,15 +22,13 @@ public class SecurityConfig {
         return http.headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
             .csrf(csrf -> csrf.ignoringRequestMatchers("/**"))
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers(new AntPathRequestMatcher("/eureka/**"))
-                .permitAll()
                 .requestMatchers(new AntPathRequestMatcher(adminServer.path("/assets/**")))
                 .permitAll()
                 .requestMatchers(new AntPathRequestMatcher(adminServer.path("/login")))
                 .permitAll()
                 .anyRequest()
                 .authenticated())
-            .formLogin(formLogin -> formLogin.successHandler(jwtAuthHandler).loginPage(adminServer.path("/login")))
+            .formLogin(formLogin -> formLogin.loginPage(adminServer.path("/login")))
             .logout(logout -> logout.logoutUrl(adminServer.path("/logout")))
             .rememberMe(rememberMe -> rememberMe.key(UUID.randomUUID().toString()).tokenValiditySeconds(1209600))
             .httpBasic(Customizer.withDefaults())
