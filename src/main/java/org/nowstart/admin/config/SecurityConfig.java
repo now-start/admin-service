@@ -9,12 +9,12 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final SuccessHandler successHandler;
     private final AdminServerProperties adminServer;
 
     @Bean
@@ -22,15 +22,11 @@ public class SecurityConfig {
         return http.headers(headersConfigurer -> headersConfigurer.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
             .csrf(csrf -> csrf.ignoringRequestMatchers("/**"))
             .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                .requestMatchers(new AntPathRequestMatcher(adminServer.path("/assets/**")))
-                .permitAll()
-                .requestMatchers(new AntPathRequestMatcher(adminServer.path("/login")))
-                .permitAll()
-                .anyRequest()
-                .authenticated())
-            .formLogin(formLogin -> formLogin.loginPage(adminServer.path("/login")))
+                .requestMatchers(adminServer.path("/assets/**"), adminServer.path("/login")).permitAll()
+                .anyRequest().authenticated())
+            .formLogin(formLogin -> formLogin.loginPage(adminServer.path("/login")).successHandler(successHandler))
             .logout(logout -> logout.logoutUrl(adminServer.path("/logout")))
-            .rememberMe(rememberMe -> rememberMe.key(UUID.randomUUID().toString()).tokenValiditySeconds(1209600))
+            .rememberMe(rememberMe -> rememberMe.key(UUID.randomUUID().toString()).tokenValiditySeconds(14 * 24 * 60 * 60))
             .httpBasic(Customizer.withDefaults())
             .build();
     }
