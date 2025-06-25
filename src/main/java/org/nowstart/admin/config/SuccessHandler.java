@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,7 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
         String jwt = Jwts.builder()
             .subject(authentication.getName())
             .issuedAt(new Date())
+            .claim("roles", List.of("ADMIN"))
             .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME_MILLIS))
             .signWith(Keys.hmacShaKeyFor(StringUtils.leftPad(key, SECRET_KEY_MIN_LENGTH, '0').getBytes()))
             .compact();
