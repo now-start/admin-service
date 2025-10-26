@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Primary;
 public class SwaggerConfig {
 
     private static final String GATEWAY_BASE_URL = "https://spring.nowstart.org";
+
     private final DiscoveryClient discoveryClient;
 
     @Bean
@@ -24,6 +25,13 @@ public class SwaggerConfig {
     public SwaggerUiConfigProperties swaggerUiConfigProperties() {
         SwaggerUiConfigProperties properties = new SwaggerUiConfigProperties();
 
+        // Syntax Highlight
+        SwaggerUiConfigProperties.SyntaxHighlight syntaxHighlight = new SwaggerUiConfigProperties.SyntaxHighlight();
+        syntaxHighlight.setActivated(true);
+        syntaxHighlight.setTheme("nord");
+        properties.setSyntaxHighlight(syntaxHighlight);
+
+        // Discovery 기반 서비스 URL 등록
         Set<AbstractSwaggerUiConfigProperties.SwaggerUrl> urls = discoveryClient.getServices().stream()
                 .map(serviceId -> {
                     String url = String.format("%s/%s/v3/api-docs", GATEWAY_BASE_URL, serviceId);
@@ -35,8 +43,19 @@ public class SwaggerConfig {
                     return swaggerUrl;
                 })
                 .collect(Collectors.toSet());
-
         properties.setUrls(urls);
+
+        // UI 옵션
+        properties.setDocExpansion("none");
+        properties.setOperationsSorter("alpha");
+        properties.setTagsSorter("alpha");
+        properties.setFilter("true");
+        properties.setDisplayRequestDuration(true);
+        properties.setDeepLinking(true);
+        properties.setTryItOutEnabled(true);
+        properties.setDisplayOperationId(true);
+        properties.setShowExtensions(true);
+
         return properties;
     }
 }
