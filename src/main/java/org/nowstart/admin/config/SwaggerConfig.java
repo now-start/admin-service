@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Primary;
 @RequiredArgsConstructor
 public class SwaggerConfig {
 
+    private static final String GATEWAY_BASE_URL = "https://spring.nowstart.org";
     private final DiscoveryClient discoveryClient;
 
     @Bean
@@ -24,16 +25,15 @@ public class SwaggerConfig {
         SwaggerUiConfigProperties properties = new SwaggerUiConfigProperties();
 
         Set<AbstractSwaggerUiConfigProperties.SwaggerUrl> urls = discoveryClient.getServices().stream()
-                .flatMap(serviceId -> discoveryClient.getInstances(serviceId).stream()
-                        .map(instance -> {
-                            String url = instance.getUri() + "/v3/api-docs";
-                            log.info("Discovered service: {} with URL: {}", serviceId, url);
-                            AbstractSwaggerUiConfigProperties.SwaggerUrl swaggerUrl =
-                                    new AbstractSwaggerUiConfigProperties.SwaggerUrl();
-                            swaggerUrl.setName(serviceId);
-                            swaggerUrl.setUrl(url);
-                            return swaggerUrl;
-                        }))
+                .map(serviceId -> {
+                    String url = String.format("%s/%s/v3/api-docs", GATEWAY_BASE_URL, serviceId);
+                    log.info("Registering Swagger URL via Gateway: {}", url);
+
+                    AbstractSwaggerUiConfigProperties.SwaggerUrl swaggerUrl = new AbstractSwaggerUiConfigProperties.SwaggerUrl();
+                    swaggerUrl.setName(serviceId);
+                    swaggerUrl.setUrl(url);
+                    return swaggerUrl;
+                })
                 .collect(Collectors.toSet());
 
         properties.setUrls(urls);
