@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Primary;
 public class SwaggerConfig {
 
     private static final String GATEWAY_BASE_URL = "https://spring.nowstart.org";
+    private static final Set<String> EXCLUDE_SERVICES = Set.of("gateway", "eureka", "admin", "config");
 
     private final DiscoveryClient discoveryClient;
 
@@ -25,14 +26,9 @@ public class SwaggerConfig {
     public SwaggerUiConfigProperties swaggerUiConfigProperties() {
         SwaggerUiConfigProperties properties = new SwaggerUiConfigProperties();
 
-        // Syntax Highlight
-        SwaggerUiConfigProperties.SyntaxHighlight syntaxHighlight = new SwaggerUiConfigProperties.SyntaxHighlight();
-        syntaxHighlight.setActivated(true);
-        syntaxHighlight.setTheme("nord");
-        properties.setSyntaxHighlight(syntaxHighlight);
-
         // Discovery 기반 서비스 URL 등록
         Set<AbstractSwaggerUiConfigProperties.SwaggerUrl> urls = discoveryClient.getServices().stream()
+                .filter(serviceId -> !EXCLUDE_SERVICES.contains(serviceId.toLowerCase()))
                 .map(serviceId -> {
                     String url = String.format("%s/%s/v3/api-docs", GATEWAY_BASE_URL, serviceId);
                     log.info("Registering Swagger URL via Gateway: {}", url);
