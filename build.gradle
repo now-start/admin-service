@@ -1,13 +1,12 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.5.0'
+    id 'org.springframework.boot' version '3.5.10'
     id 'io.spring.dependency-management' version '1.1.7'
-    id "com.gorylenko.gradle-git-properties" version "2.5.0"
-    id 'org.cyclonedx.bom' version '2.3.1'
+    id 'com.gorylenko.gradle-git-properties' version '2.5.4'
 }
 
 group = 'org.nowstart'
-version = '2.10.3'
+version = '2.11.0'
 
 springBoot {
     buildInfo()
@@ -15,7 +14,7 @@ springBoot {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -30,12 +29,13 @@ repositories {
 }
 
 ext {
-    set('springBootAdminVersion', "3.5.0")
-    set('springCloudVersion', "2025.0.0")
+    set('springBootAdminVersion', "3.5.7")
+    set('springCloudVersion', "2025.0.1")
+    set('springDocVersion', "2.8.15")
 }
 
 dependencies {
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
@@ -47,13 +47,13 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 dependencyManagement {
     imports {
         mavenBom "de.codecentric:spring-boot-admin-dependencies:${springBootAdminVersion}"
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        mavenBom "org.springdoc:springdoc-openapi-bom:${springDocVersion}"
     }
 }
 
