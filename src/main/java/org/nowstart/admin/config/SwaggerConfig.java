@@ -28,6 +28,7 @@ public class SwaggerConfig {
         properties.setUrls(getSwaggerUrls());
 
         // UI 옵션
+        properties.setConfigUrl("/admin/v3/api-docs/swagger-config");
         properties.setDocExpansion("none");
         properties.setOperationsSorter("alpha");
         properties.setTagsSorter("alpha");
